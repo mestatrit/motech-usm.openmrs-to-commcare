@@ -1,8 +1,9 @@
 package org.motechproject.commcare.domain;
 
+import org.apache.commons.lang.ObjectUtils;
+
 /**
- * Domain class that represents a series of case informations to be converted
- * into case XML for upload to CommCareHQ.
+ * Domain class that represents a series of case informations to be converted into case XML for upload to CommCareHQ.
  */
 public class CaseTask {
     private CreateTask createTask;
@@ -13,6 +14,33 @@ public class CaseTask {
     private String userId;
     private String dateModified;
     private String xmlns;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CaseTask)) {
+            return false;
+        }
+        CaseTask other = (CaseTask) obj;
+        return ObjectUtils.equals(createTask, other.createTask) && ObjectUtils.equals(updateTask, other.updateTask)
+                && ObjectUtils.equals(indexTask, other.indexTask) && ObjectUtils.equals(closeTask, other.closeTask)
+                && ObjectUtils.equals(caseId, other.caseId) && ObjectUtils.equals(userId, other.userId)
+                && ObjectUtils.equals(dateModified, other.dateModified) && ObjectUtils.equals(xmlns, other.xmlns);
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 31 + ObjectUtils.hashCode(createTask);
+        hash = hash * 31 + ObjectUtils.hashCode(updateTask);
+        hash = hash * 31 + ObjectUtils.hashCode(indexTask);
+        hash = hash * 31 + ObjectUtils.hashCode(closeTask);
+        hash = hash * 31 + ObjectUtils.hashCode(caseId);
+        hash = hash * 31 + ObjectUtils.hashCode(userId);
+        hash = hash * 31 + ObjectUtils.hashCode(dateModified);
+        hash = hash * 31 + ObjectUtils.hashCode(xmlns);
+        
+        return hash;
+    }
 
     public CreateTask getCreateTask() {
         return this.createTask;

@@ -1,0 +1,1374 @@
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns:orx="http://openrosa.org/jr/xforms" xmlns="http://www.w3.org/2002/xforms"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+        
+    <h:head>
+                
+        <h:title>Visit</h:title>
+                
+        <model>
+                        
+            <instance>
+                                
+                <data xmlns:jrm="http://dev.commcarehq.org/jr/xforms" xmlns="http://openrosa.org/formdesigner/185A7E63-0ECD-4D9A-8357-6FD770B6F065"
+                    uiVersion="1" version="1" name="Visit">
+                                        
+                    <condition_improved concept_id="1898" />
+                                                            
+                    <condition_improved-yes concept_id="1898" />
+                                        
+                    <cur_birthplan />
+                                        
+                    <prev_birthplan />
+                                        
+                    <recommended_counseling_topics />
+                                        
+                    <cur_num_anc />
+                                        
+                    <cur_last_anc_date />
+                                        
+                    <num_weeks_last_anc />
+                                        
+                    <prev_anc_date />
+                                        
+                    <prev_num_anc />
+                                        
+                    <edd concept_id="5596" />
+                                        
+                    <visit_hospital concept_id="1889" />
+                                        
+                    <emergency_danger_sign concept_id="1887" />
+                                        
+                    <emergency_referral />
+                                        
+                    <immediate_danger_sign />
+                                        
+                    <immediate_referral />
+                                        
+                    <group_referral_dangersign>
+                                                
+                        <referral_malaria />
+                                                
+                        <condition_not_improved />
+                                                
+                        <referral_given concept_id="1648" />
+                                                
+                        <referral_type concept_id="1885" />
+                                            
+                    </group_referral_dangersign>
+                                        
+                    <group_counseling>
+                                                
+                        <iron_and_folic concept_id="1891" />
+                                                
+                        <anc_visit_update />
+                                                
+                        <num_anc concept_id="1425" />
+                                                
+                        <last_anc_date concept_id="159590" />
+                                                
+                        <ANC_referral_urgent />
+                                                
+                        <counsel_anc1 />
+                                                
+                        <previously_counseled />
+                                                
+                        <counsel_type concept_id="1379" />
+                                                
+                        <counsel_nutrition_group>
+                                                        
+                            <eat_more />
+                                                        
+                            <iron_and_folic_counseling />
+                                                    
+                        </counsel_nutrition_group>
+                                                
+                        <counsel_hiv_group>
+                                                        
+                            <early_testing />
+                                                        
+                            <all_ANC_visits />
+                                                        
+                            <deliver_clinic />
+                                                    
+                        </counsel_hiv_group>
+                                                
+                        <counsel_birthplan_group>
+                                                        
+                            <facility_birth />
+                                                        
+                            <save_money />
+                                                        
+                            <labor_signs />
+                                                        
+                            <contact_transport />
+                                                        
+                            <ease_labor />
+                                                        
+                            <last_referral />
+                                                    
+                        </counsel_birthplan_group>
+                                                
+                        <counsel_bednet>
+                                                        
+                            <all_people_bednet />
+                                                        
+                            <bednets_reduce_risk />
+                                                        
+                            <wash_bednet />
+                                                    
+                        </counsel_bednet>
+                                                
+                        <counsel_ANC_group>
+                                                        
+                            <four_visits />
+                                                        
+                            <visit_benefits />
+                                                        
+                            <hiv_testing />
+                                                    
+                        </counsel_ANC_group>
+                                            
+                    </group_counseling>
+                                        
+                    <cur_danger_signs />
+                                        
+                    <prev_referral />
+                                        
+                    <prev_referral_type />
+                                        
+                    <curr_referral />
+                                        
+                    <last_visit />
+                                        
+                    <prev_counseled_topics />
+                                        
+                    <cur_counseling_topics />
+                                    
+                </data>
+                            
+            </instance>
+                        
+            <bind nodeset="/data/condition_improved" relevant="/data/prev_referral_type != ''" required="true()" />
+                        
+            <bind nodeset="/data/cur_birthplan" relevant="selected(/data/group_counseling/counsel_type, 'birthplan')" />
+                        
+            <bind nodeset="/data/prev_birthplan" />
+                        
+            <bind nodeset="/data/recommended_counseling_topics"
+                calculate="concat('                    Nutrition                              HIV                            ', if(not(selected(/data/prev_counseled_topics, 'birthplan')) or /data/prev_counseled_topics = '',   '                   Birthplan  ', ''), if(/data/immediate_danger_sign = 'fv', '                 Bednet   ', ''), if((int(date(/data/edd) - today()) &lt;= 140 and /data/cur_num_anc &lt; 1) or (/data/num_weeks_last_anc &gt;= 6 and /data/cur_num_anc &gt; 0), '            ANC Visits', ''))" />
+                        
+            <bind nodeset="/data/cur_num_anc"
+                calculate="if(/data/group_counseling/anc_visit_update != 'no', /data/group_counseling/num_anc, if(/data/prev_num_anc != '', /data/prev_num_anc, 0))" />
+                        
+            <bind nodeset="/data/cur_last_anc_date" required="true()"
+                calculate="if(/data/group_counseling/anc_visit_update != 'no', /data/group_counseling/last_anc_date, /data/prev_anc_date)" />
+                        
+            <bind nodeset="/data/num_weeks_last_anc" calculate="int(today() - date(/data/cur_last_anc_date)) div 7" />
+                        
+            <bind nodeset="/data/prev_anc_date" />
+                        
+            <bind nodeset="/data/prev_num_anc" />
+                        
+            <bind nodeset="/data/edd" type="xsd:date" />
+                        
+            <bind nodeset="/data/visit_hospital" relevant="/data/prev_referral_type != ''" required="true()" />
+                        
+            <bind nodeset="/data/emergency_danger_sign" />
+                        
+            <bind nodeset="/data/emergency_referral" relevant="/data/emergency_danger_sign != ''" />
+                        
+            <bind nodeset="/data/immediate_danger_sign" relevant="/data/emergency_danger_sign = ''" />
+                        
+            <bind nodeset="/data/immediate_referral" relevant="/data/immediate_danger_sign != '' and /data/immediate_danger_sign != 'fv'" />
+                        
+            <bind nodeset="/data/group_referral_dangersign"
+                relevant="/data/emergency_danger_sign != '' or /data/immediate_danger_sign != '' or /data/condition_improved = 'no'" />
+                        
+            <bind nodeset="/data/group_referral_dangersign/referral_malaria" relevant="/data/immediate_danger_sign = 'fv'"
+                required="false()" />
+                        
+            <bind nodeset="/data/group_referral_dangersign/condition_not_improved"
+                relevant="/data/condition_improved = 'no' and /data/emergency_danger_sign =&quot; and /data/immediate_danger_sign =&quot;" />
+                        
+            <bind nodeset="/data/group_referral_dangersign/referral_given" required="true()" />
+                        
+            <bind nodeset="/data/group_referral_dangersign/referral_type" relevant="/data/group_referral_dangersign/referral_given = 'yes'"
+                required="true()" />
+                        
+            <bind nodeset="/data/group_counseling" relevant="/data/group_referral_dangersign/referral_type != 'emergency'" />
+                        
+            <bind nodeset="/data/group_counseling/iron_and_folic" required="true()" />
+                        
+            <bind nodeset="/data/group_counseling/anc_visit_update" relevant="/data/prev_num_anc != ''" required="true()" />
+                        
+            <bind nodeset="/data/group_counseling/num_anc" type="xsd:int"
+                constraint=". &lt; 50 and if(/data/prev_num_anc = '', true(), . &gt; /data/prev_num_anc)" relevant="/data/group_counseling/anc_visit_update != 'no'"
+                required="true()" />
+                        
+            <bind nodeset="/data/group_counseling/last_anc_date" type="xsd:date"
+                constraint="(. &lt; today()) and if(/data/prev_anc_date != '', . &gt;= date(/data/prev_anc_date), . &gt; date(/data/edd - 274))"
+                jr:constraintMsg="jr:itext('last_anc_date-constraintMsg')"
+                relevant="/data/group_counseling/anc_visit_update != 'no' and /data/group_counseling/num_anc &gt; 0"
+                required="true()" />
+                        
+            <bind nodeset="/data/group_counseling/ANC_referral_urgent" relevant="int(date(/data/edd) - today()) &lt;= 140 and /data/cur_num_anc &lt; 1" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_anc1" relevant="/data/num_weeks_last_anc &gt;= 6 and /data/cur_num_anc &gt; 0" />
+                        
+            <bind nodeset="/data/group_counseling/previously_counseled" calculate="/data/prev_counseled_topics != ''" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_type" relevant="/data/group_referral_dangersign/referral_type != 'emergency'"
+                required="false()" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_nutrition_group" relevant="selected(/data/group_counseling/counsel_type, 'nutrition')" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_nutrition_group/eat_more" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_nutrition_group/iron_and_folic_counseling" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_hiv_group" relevant="selected(/data/group_counseling/counsel_type,'hiv')" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_hiv_group/early_testing" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_hiv_group/all_ANC_visits" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_hiv_group/deliver_clinic" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_birthplan_group" relevant="selected(/data/group_counseling/counsel_type, 'birthplan')" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_birthplan_group/facility_birth" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_birthplan_group/save_money" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_birthplan_group/labor_signs" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_birthplan_group/contact_transport" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_birthplan_group/ease_labor" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_birthplan_group/last_referral" relevant="/data/group_referral_dangersign/referral_given = 'yes'"
+                calculate="today()" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_bednet" relevant="selected(/data/group_counseling/counsel_type, 'bednet')" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_bednet/all_people_bednet" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_bednet/bednets_reduce_risk" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_bednet/wash_bednet" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_ANC_group" relevant="selected(/data/group_counseling/counsel_type, 'anc_visits')" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_ANC_group/four_visits" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_ANC_group/visit_benefits" />
+                        
+            <bind nodeset="/data/group_counseling/counsel_ANC_group/hiv_testing" />
+                        
+            <bind nodeset="/data/cur_danger_signs" calculate="concat(/data/immediate_danger_sign, /data/emergency_danger_sign)" />
+                        
+            <bind nodeset="/data/prev_referral" type="xsd:string" />
+                        
+            <bind nodeset="/data/prev_referral_type" />
+                        
+            <bind nodeset="/data/curr_referral" calculate="/data/group_referral_dangersign/referral_type" />
+                        
+            <bind nodeset="/data/last_visit" calculate="today()" />
+                        
+            <bind nodeset="/data/cur_counseling_topics"
+                calculate="if(/data/group_counseling/counsel_type != '', /data/group_counseling/counsel_type, 'None')" />
+                        
+            <itext>
+                                
+                <translation lang="en" default="">
+                                        
+                    <text id="condition_improved-label">
+                                                
+                        <value>
+                            Last visit the woman was given a
+                            <output ref="/data/prev_referral_type" />
+                            referral. Has the woman's condition improved since last visit?
+                        </value>
+                                            
+                    </text>
+                                        
+                    <text id="condition_improved-yes-label">
+                                                
+                        <value>Yes</value>
+                                            
+                    </text>
+                                        
+                    <text id="condition_improved-no-label">
+                                                
+                        <value>No</value>
+                                            
+                    </text>
+                                        
+                    <text id="condition_improved-unsure-label">
+                                                
+                        <value>Unsure</value>
+                                            
+                    </text>
+                                        
+                    <text id="visit_hospital-label">
+                                                
+                        <value>Did the woman visit a clinic or hospital since last CHW visit?</value>
+                                            
+                    </text>
+                                        
+                    <text id="visit_hospital-yes-label">
+                                                
+                        <value>yes</value>
+                                            
+                    </text>
+                                        
+                    <text id="visit_hospital-no-label">
+                                                
+                        <value>no</value>
+                                            
+                    </text>
+                                        
+                    <text id="visit_hospital-unsure-label">
+                                                
+                        <value>unsure</value>
+                                            
+                    </text>
+                                        
+                    <text id="emergency_danger_sign-label">
+                                                
+                        <value>Does this pregnant woman show any of these emergency symptoms or conditions?</value>
+                                            
+                    </text>
+                                        
+                    <text id="emergency_danger_sign-vaginal_bleeding-label">
+                                                
+                        <value>Vaginal Bleeding</value>
+                                            
+                    </text>
+                                        
+                    <text id="emergency_danger_sign-convulsions-label">
+                                                
+                        <value>Convulsions</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-pa-label">
+                                                
+                        <value>Abdominal/Pelvic Pain</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-bv-label">
+                                                
+                        <value>Blurred vision</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-ph-label">
+                                                
+                        <value>Severe Headache</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-sw-label">
+                                                
+                        <value>Swelling of face or hands</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-as-label">
+                                                
+                        <value>Accident/Trauma</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-fm-label">
+                                                
+                        <value>No fetal movement</value>
+                                            
+                    </text>
+                                        
+                    <text id="emergency_danger_sign-loss_of_consciousness-label">
+                                                
+                        <value>Loss of Consciousness</value>
+                                            
+                    </text>
+                                        
+                    <text id="emergency_referral-label">
+                                                
+                        <value>This woman has a danger sign that requires an emergency referral. Call the emergency
+                            number now to transport the pregnant woman to the clinic.   Emergency number: 0733202310</value>
+                                            
+                    </text>
+                                        
+                    <text id="immediate_danger_sign-label">
+                                                
+                        <value>Does this pregnant woman show any of these immediately dangerous symptoms or conditions?</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-nt-label">
+                                                
+                        <value>Not responding to treatment</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-cw-label">
+                                                
+                        <value>Cough &gt; 3 weeks</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-fv-label">
+                                                
+                        <value>Fever</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-pu-label">
+                                                
+                        <value>Painful Urination</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-nb-label">
+                                                
+                        <value>Night blindness</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-vd-label">
+                                                
+                        <value>Abnormal vaginal discharge</value>
+                                            
+                    </text>
+                                        
+                    <text id="danger_sign_type-vp-label">
+                                                
+                        <value>Vaginal pain or sores</value>
+                                            
+                    </text>
+                                        
+                    <text id="immediate_danger_sign-vomiting-label">
+                                                
+                        <value>Vomiting</value>
+                                            
+                    </text>
+                                        
+                    <text id="immediate_danger_sign-other-label">
+                                                
+                        <value>Other</value>
+                                            
+                    </text>
+                                        
+                    <text id="immediate_referral-label">
+                                                
+                        <value>This woman has a danger sign that requires a basic (24 hour) referral. Refer to the
+                            clinic immediately. Pregnant woman requires treatment within 24 hours.</value>
+                                            
+                    </text>
+                                        
+                    <text id="referral_malaria-label">
+                                                
+                        <value>This woman may have malaria, this requires a basic (24 hour) referral. Refer to the
+                            clinic immediately. Pregnant woman requires treatment within 24 hours.</value>
+                                            
+                    </text>
+                                        
+                    <text id="condition_not_improved-label">
+                                                
+                        <value>This woman has a previous danger sign that has not improved. A basic (24 hour) referral
+                            is recommended. Pregnant woman requires treatment within 24 hours.</value>
+                                            
+                    </text>
+                                        
+                    <text id="referral_given-label">
+                                                
+                        <value>Did your refer the woman to the health facility?</value>
+                                            
+                    </text>
+                                        
+                    <text id="referral_given-yes-label">
+                                                
+                        <value>Yes</value>
+                                            
+                    </text>
+                                        
+                    <text id="referral_given-no-label">
+                                                
+                        <value>No</value>
+                                            
+                    </text>
+                                        
+                    <text id="referral_type-label">
+                                                
+                        <value>Select type of referral given</value>
+                                            
+                    </text>
+                                        
+                    <text id="referral_type-referral_type-ambulance-label">
+                                                
+                        <value>Emergency (ambulance)</value>
+                                            
+                    </text>
+                                        
+                    <text id="referral_type-referral_type-emergency-label">
+                                                
+                        <value>Basic (24 hour)</value>
+                                            
+                    </text>
+                                        
+                    <text id="referral_type-referral_type-basic-label">
+                                                
+                        <value>Convenient</value>
+                                            
+                    </text>
+                                        
+                    <text id="iron_and_folic-label">
+                                                
+                        <value>Taking iron and folic?</value>
+                                            
+                    </text>
+                                        
+                    <text id="iron_and_folic-yes-label">
+                                                
+                        <value>Yes</value>
+                                            
+                    </text>
+                                        
+                    <text id="iron_and_folic-no-label">
+                                                
+                        <value>No</value>
+                                            
+                    </text>
+                                        
+                    <text id="anc_visit_update-label">
+                                                
+                        <value>
+                            Last ANC visit was visit number
+                            <output ref="/data/prev_num_anc" />
+                            on
+                            <output ref="/data/prev_anc_date" />
+                            .  Do you want to update ANC information?
+                        </value>
+                                            
+                    </text>
+                                        
+                    <text id="anc1-yes-label">
+                                                
+                        <value>Yes</value>
+                                            
+                    </text>
+                                        
+                    <text id="anc1-no-label">
+                                                
+                        <value>No</value>
+                                            
+                    </text>
+                                        
+                    <text id="num_anc-label">
+                                                
+                        <value>Number of ANC visits</value>
+                                            
+                    </text>
+                                        
+                    <text id="last_anc_date-label">
+                                                
+                        <value>Date of last ANC visit</value>
+                                            
+                    </text>
+                                        
+                    <text id="last_anc_date-constraintMsg">
+                                                
+                        <value>Date must be before today and after the last visit date</value>
+                                            
+                    </text>
+                                        
+                    <text id="ANC_referral_urgent-label">
+                                                
+                        <value>The woman must go the clinic to receive antenatal care.  She is very far behind on her
+                            antenatal visits.</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_anc1-label">
+                                                
+                        <value>The woman is due for an ANC visit.</value>
+                                            
+                    </text>
+                                        
+                    <text id="previously_counseled-label">
+                                                
+                        <value>
+                            It is recommended you counsel the woman on:
+                            <output ref="/data/recommended_counseling_topics" />
+                        </value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_type-label">
+                                                
+                        <value>Choose counseling topics</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_type-nutrition-label">
+                                                
+                        <value>Nutrition</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_type-hiv-label">
+                                                
+                        <value>HIV</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_type-birthplan-label">
+                                                
+                        <value>Birthplan</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_type-bednet-label">
+                                                
+                        <value>Bednet</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_type-anc_visits-label">
+                                                
+                        <value>ANC Visits</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_nutrition_group-label">
+                                                
+                        <value>Nutrition Counseling</value>
+                                            
+                    </text>
+                                        
+                    <text id="eat_more-label">
+                                                
+                        <value>Eat more</value>
+                                                
+                        <value form="image">jr://file/commcare/image/data/eat_more.png</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/eat_more.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="iron_and_folic_counseling-label">
+                                                
+                        <value>Take iron and folic</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/iron_and_folic_counseling.mp3</value>
+                                                
+                        <value form="image">jr://file/commcare/image/data/iron_and_folic_counseling.png</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_hiv_group-label">
+                                                
+                        <value>HIV Counseling</value>
+                                            
+                    </text>
+                                        
+                    <text id="early_testing-label">
+                                                
+                        <value>Early testing</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/early_testing.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="all_ANC_visits-label">
+                                                
+                        <value>Attend all ANC</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/all_ANC_visits.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="deliver_clinic-label">
+                                                
+                        <value>Deliver at clinic</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/deliver_clinic.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_birthplan_group-label">
+                                                
+                        <value>Birthplan Counseling</value>
+                                            
+                    </text>
+                                        
+                    <text id="facility_birth-label">
+                                                
+                        <value>Deliver at facility</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/facility_birth.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="save_money-label">
+                                                
+                        <value>Save money and prepare</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/save_money.mp3</value>
+                                                
+                        <value form="image">jr://file/commcare/image/data/save_money.png</value>
+                                            
+                    </text>
+                                        
+                    <text id="labor_signs-label">
+                                                
+                        <value>Labor signs</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/labor_signs.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="contact_transport-label">
+                                                
+                        <value>Contact transport for delivery</value>
+                                                
+                        <value form="image">jr://file/commcare/image/data/contact_transport.png</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/contact_transport.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="ease_labor-label">
+                                                
+                        <value>Tips to ease labor</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/ease_labor.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_bednet-label">
+                                                
+                        <value>Bednet Counseling</value>
+                                            
+                    </text>
+                                        
+                    <text id="all_people_bednet-label">
+                                                
+                        <value>Pregnant women at risk for malaria</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/all_people_bednet.mp3</value>
+                                                
+                        <value form="image">jr://file/commcare/image/data/all_people_bednet.png</value>
+                                            
+                    </text>
+                                        
+                    <text id="bednets_reduce_risk-label">
+                                                
+                        <value>Bednets reduce risk</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/bednets_reduce_risk.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="wash_bednet-label">
+                                                
+                        <value>How to wash bednet</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/wash_bednet.mp3</value>
+                                            
+                    </text>
+                                        
+                    <text id="counsel_ANC_group-label">
+                                                
+                        <value>ANC Visit Counseling</value>
+                                            
+                    </text>
+                                        
+                    <text id="four_visits-label">
+                                                
+                        <value>Visit once every six weeks</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/four_visits.mp3</value>
+                                                
+                        <value form="image">jr://file/commcare/image/data/four_visits.png</value>
+                                            
+                    </text>
+                                        
+                    <text id="visit_benefits-label">
+                                                
+                        <value>Benefits of ANC visits</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/visit_benefits.mp3</value>
+                                                
+                        <value form="image">jr://file/commcare/image/data/visit_benefits.png</value>
+                                            
+                    </text>
+                                        
+                    <text id="hiv_testing-label">
+                                                
+                        <value>HIV testing</value>
+                                                
+                        <value form="audio">jr://file/commcare/audio/data/hiv_testing.mp3</value>
+                                            
+                    </text>
+                                    
+                </translation>
+                            
+            </itext>
+                    
+        </model>
+            
+    </h:head>
+        
+    <h:body>
+                
+        <select1 ref="/data/condition_improved">
+                        
+            <label ref="jr:itext('condition_improved-label')" />
+                        
+            <item>
+                                
+                <label ref="jr:itext('condition_improved-yes-label')" />
+                                
+                <value>yes</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('condition_improved-no-label')" />
+                                
+                <value>no</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('condition_improved-unsure-label')" />
+                                
+                <value>unsure</value>
+                            
+            </item>
+                    
+        </select1>
+                
+        <select1 ref="/data/visit_hospital">
+                        
+            <label ref="jr:itext('visit_hospital-label')" />
+                        
+            <item>
+                                
+                <label ref="jr:itext('visit_hospital-yes-label')" />
+                                
+                <value>yes</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('visit_hospital-no-label')" />
+                                
+                <value>no</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('visit_hospital-unsure-label')" />
+                                
+                <value>unsure</value>
+                            
+            </item>
+                    
+        </select1>
+                
+        <select ref="/data/emergency_danger_sign">
+                        
+            <label ref="jr:itext('emergency_danger_sign-label')" />
+                        
+            <item>
+                                
+                <label ref="jr:itext('emergency_danger_sign-vaginal_bleeding-label')" />
+                                
+                <value>vaginal_bleeding</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('emergency_danger_sign-convulsions-label')" />
+                                
+                <value>convulsions</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-pa-label')" />
+                                
+                <value>pa</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-bv-label')" />
+                                
+                <value>bv</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-ph-label')" />
+                                
+                <value>ph</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-sw-label')" />
+                                
+                <value>sw</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-as-label')" />
+                                
+                <value>as</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-fm-label')" />
+                                
+                <value>fm</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('emergency_danger_sign-loss_of_consciousness-label')" />
+                                
+                <value>loss_of_consciousness</value>
+                            
+            </item>
+                    
+        </select>
+                
+        <trigger ref="/data/emergency_referral">
+                        
+            <label ref="jr:itext('emergency_referral-label')" />
+                    
+        </trigger>
+                
+        <select ref="/data/immediate_danger_sign">
+                        
+            <label ref="jr:itext('immediate_danger_sign-label')" />
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-nt-label')" />
+                                
+                <value>nt</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-cw-label')" />
+                                
+                <value>cw</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-fv-label')" />
+                                
+                <value>fv</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-pu-label')" />
+                                
+                <value>pu</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-nb-label')" />
+                                
+                <value>nb</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-vd-label')" />
+                                
+                <value>vd</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('danger_sign_type-vp-label')" />
+                                
+                <value>vp</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('immediate_danger_sign-vomiting-label')" />
+                                
+                <value>vomiting</value>
+                            
+            </item>
+                        
+            <item>
+                                
+                <label ref="jr:itext('immediate_danger_sign-other-label')" />
+                                
+                <value>other</value>
+                            
+            </item>
+                    
+        </select>
+                
+        <trigger ref="/data/immediate_referral">
+                        
+            <label ref="jr:itext('immediate_referral-label')" />
+                    
+        </trigger>
+                
+        <group ref="/data/group_referral_dangersign">
+                        
+            <trigger ref="/data/group_referral_dangersign/referral_malaria">
+                                
+                <label ref="jr:itext('referral_malaria-label')" />
+                            
+            </trigger>
+                        
+            <trigger ref="/data/group_referral_dangersign/condition_not_improved">
+                                
+                <label ref="jr:itext('condition_not_improved-label')" />
+                            
+            </trigger>
+                        
+            <select1 ref="/data/group_referral_dangersign/referral_given">
+                                
+                <label ref="jr:itext('referral_given-label')" />
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('referral_given-yes-label')" />
+                                        
+                    <value>yes</value>
+                                    
+                </item>
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('referral_given-no-label')" />
+                                        
+                    <value>no</value>
+                                    
+                </item>
+                            
+            </select1>
+                        
+            <select1 ref="/data/group_referral_dangersign/referral_type">
+                                
+                <label ref="jr:itext('referral_type-label')" />
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('referral_type-referral_type-ambulance-label')" />
+                                        
+                    <value>emergency</value>
+                                    
+                </item>
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('referral_type-referral_type-emergency-label')" />
+                                        
+                    <value>basic</value>
+                                    
+                </item>
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('referral_type-referral_type-basic-label')" />
+                                        
+                    <value>convenient</value>
+                                    
+                </item>
+                            
+            </select1>
+                    
+        </group>
+                
+        <group ref="/data/group_counseling">
+                        
+            <select1 ref="/data/group_counseling/iron_and_folic">
+                                
+                <label ref="jr:itext('iron_and_folic-label')" />
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('iron_and_folic-yes-label')" />
+                                        
+                    <value>yes</value>
+                                    
+                </item>
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('iron_and_folic-no-label')" />
+                                        
+                    <value>no</value>
+                                    
+                </item>
+                            
+            </select1>
+                        
+            <select1 ref="/data/group_counseling/anc_visit_update">
+                                
+                <label ref="jr:itext('anc_visit_update-label')" />
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('anc1-yes-label')" />
+                                        
+                    <value>yes</value>
+                                    
+                </item>
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('anc1-no-label')" />
+                                        
+                    <value>no</value>
+                                    
+                </item>
+                            
+            </select1>
+                        
+            <input ref="/data/group_counseling/num_anc">
+                                
+                <label ref="jr:itext('num_anc-label')" />
+                            
+            </input>
+                        
+            <input ref="/data/group_counseling/last_anc_date">
+                                
+                <label ref="jr:itext('last_anc_date-label')" />
+                            
+            </input>
+                        
+            <trigger ref="/data/group_counseling/ANC_referral_urgent">
+                                
+                <label ref="jr:itext('ANC_referral_urgent-label')" />
+                            
+            </trigger>
+                        
+            <trigger ref="/data/group_counseling/counsel_anc1">
+                                
+                <label ref="jr:itext('counsel_anc1-label')" />
+                            
+            </trigger>
+                        
+            <trigger ref="/data/group_counseling/previously_counseled">
+                                
+                <label ref="jr:itext('previously_counseled-label')" />
+                            
+            </trigger>
+                        
+            <select ref="/data/group_counseling/counsel_type">
+                                
+                <label ref="jr:itext('counsel_type-label')" />
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('counsel_type-nutrition-label')" />
+                                        
+                    <value>nutrition</value>
+                                    
+                </item>
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('counsel_type-hiv-label')" />
+                                        
+                    <value>hiv</value>
+                                    
+                </item>
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('counsel_type-birthplan-label')" />
+                                        
+                    <value>birthplan</value>
+                                    
+                </item>
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('counsel_type-bednet-label')" />
+                                        
+                    <value>bednet</value>
+                                    
+                </item>
+                                
+                <item>
+                                        
+                    <label ref="jr:itext('counsel_type-anc_visits-label')" />
+                                        
+                    <value>anc_visits</value>
+                                    
+                </item>
+                            
+            </select>
+                        
+            <group ref="/data/group_counseling/counsel_nutrition_group">
+                                
+                <label ref="jr:itext('counsel_nutrition_group-label')" />
+                                
+                <trigger ref="/data/group_counseling/counsel_nutrition_group/eat_more">
+                                        
+                    <label ref="jr:itext('eat_more-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_nutrition_group/iron_and_folic_counseling">
+                                        
+                    <label ref="jr:itext('iron_and_folic_counseling-label')" />
+                                    
+                </trigger>
+                            
+            </group>
+                        
+            <group ref="/data/group_counseling/counsel_hiv_group">
+                                
+                <label ref="jr:itext('counsel_hiv_group-label')" />
+                                
+                <trigger ref="/data/group_counseling/counsel_hiv_group/early_testing">
+                                        
+                    <label ref="jr:itext('early_testing-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_hiv_group/all_ANC_visits">
+                                        
+                    <label ref="jr:itext('all_ANC_visits-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_hiv_group/deliver_clinic">
+                                        
+                    <label ref="jr:itext('deliver_clinic-label')" />
+                                    
+                </trigger>
+                            
+            </group>
+                        
+            <group ref="/data/group_counseling/counsel_birthplan_group">
+                                
+                <label ref="jr:itext('counsel_birthplan_group-label')" />
+                                
+                <trigger ref="/data/group_counseling/counsel_birthplan_group/facility_birth">
+                                        
+                    <label ref="jr:itext('facility_birth-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_birthplan_group/save_money">
+                                        
+                    <label ref="jr:itext('save_money-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_birthplan_group/labor_signs">
+                                        
+                    <label ref="jr:itext('labor_signs-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_birthplan_group/contact_transport">
+                                        
+                    <label ref="jr:itext('contact_transport-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_birthplan_group/ease_labor">
+                                        
+                    <label ref="jr:itext('ease_labor-label')" />
+                                    
+                </trigger>
+                            
+            </group>
+                        
+            <group ref="/data/group_counseling/counsel_bednet">
+                                
+                <label ref="jr:itext('counsel_bednet-label')" />
+                                
+                <trigger ref="/data/group_counseling/counsel_bednet/all_people_bednet">
+                                        
+                    <label ref="jr:itext('all_people_bednet-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_bednet/bednets_reduce_risk">
+                                        
+                    <label ref="jr:itext('bednets_reduce_risk-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_bednet/wash_bednet">
+                                        
+                    <label ref="jr:itext('wash_bednet-label')" />
+                                    
+                </trigger>
+                            
+            </group>
+                        
+            <group ref="/data/group_counseling/counsel_ANC_group">
+                                
+                <label ref="jr:itext('counsel_ANC_group-label')" />
+                                
+                <trigger ref="/data/group_counseling/counsel_ANC_group/four_visits">
+                                        
+                    <label ref="jr:itext('four_visits-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_ANC_group/visit_benefits">
+                                        
+                    <label ref="jr:itext('visit_benefits-label')" />
+                                    
+                </trigger>
+                                
+                <trigger ref="/data/group_counseling/counsel_ANC_group/hiv_testing">
+                                        
+                    <label ref="jr:itext('hiv_testing-label')" />
+                                    
+                </trigger>
+                            
+            </group>
+                    
+        </group>
+            
+    </h:body>
+</h:html>

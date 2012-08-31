@@ -21,6 +21,10 @@
         <level value="WARN" />
     </logger>
 
+    <logger name="org.motechproject.openmrs.atomfeed">
+        <level value="DEBUG" />
+    </logger>
+
     <root>
         <priority value="WARN" />
         <appender-ref ref="CONSOLE" />

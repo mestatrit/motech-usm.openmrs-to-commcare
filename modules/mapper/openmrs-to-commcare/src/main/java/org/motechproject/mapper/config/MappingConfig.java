@@ -1,4 +1,4 @@
-package org.motechproject.mapper;
+package org.motechproject.mapper.config;
 
 public class MappingConfig {
     private String conceptName;

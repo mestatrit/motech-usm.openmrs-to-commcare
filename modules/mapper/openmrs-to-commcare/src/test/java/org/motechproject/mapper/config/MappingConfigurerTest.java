@@ -1,10 +1,13 @@
-package org.motechproject.mapper;
+package org.motechproject.mapper.config;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
 import org.junit.Test;
+import org.motechproject.mapper.Mapper;
+import org.motechproject.mapper.Mapping;
+import org.motechproject.mapper.config.MappingConfigurer;
 import org.springframework.core.io.ClassPathResource;
 
 public class MappingConfigurerTest {

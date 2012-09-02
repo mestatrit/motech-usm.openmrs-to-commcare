@@ -207,8 +207,8 @@
         <module>modules/message-campaign/message-campaign-bundle</module>
         <module>modules/mobileforms/api-bundle</module>
         <module>modules/mrs/api-bundle</module>
-        <module>modules/mrs/atomfeed-bundle</module>
         <module>modules/openmrs/api-bundle</module>
+        <module>modules/openmrs/atomfeed-bundle</module>
         <module>modules/openmrs/ws-bundle</module>
         <module>modules/outbox/outbox-bundle</module>
         <module>modules/pillreminder/api-bundle</module>

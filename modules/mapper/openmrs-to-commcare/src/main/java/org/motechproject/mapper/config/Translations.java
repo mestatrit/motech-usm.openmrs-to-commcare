@@ -1,4 +1,4 @@
-package org.motechproject.mapper;
+package org.motechproject.mapper.config;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

@@ -1,7 +1,10 @@
-package org.motechproject.mapper;
+package org.motechproject.mapper.config;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import org.motechproject.mapper.Mapper;
+import org.motechproject.mapper.Mapping;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

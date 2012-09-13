@@ -20,14 +20,14 @@ public class Encounter {
     private List<Observation> obs;
 
     public static class EncounterType {
-        private String display;
+        private String name;
 
-        public String getDisplay() {
-            return display;
+        public String getName() {
+            return name;
         }
 
-        public void setDisplay(String display) {
-            this.display = display;
+        public void setName(String name) {
+            this.name = name;
         }
     }
 
@@ -35,7 +35,7 @@ public class Encounter {
 
         @Override
         public JsonElement serialize(EncounterType src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(src.getDisplay());
+            return new JsonPrimitive(src.getName());
         }
 
     }

@@ -6,13 +6,12 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <context:annotation-config />
-    <context:component-scan base-package="org.motechproject.openmrs" />
+    <context:component-scan base-package="org.motechproject.openmrs.ws" />
 
     <bean id="openmrsWsSettings" class="org.motechproject.server.config.SettingsFacade">
         <property name="configFiles">
             <list>
                 <value>classpath:openmrs.properties</value>
-                <value>classpath:openmrs-urls.properties</value>
             </list>
         </property>
         <property name="platformSettingsService" ref="platformSettingsServiceOsgi" />
@@ -27,7 +26,7 @@
         <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_NEVER" />
     </bean>
 
-    <bean id="openMrshttpClient" class="org.motechproject.openmrs.rest.HttpClientFactoryBean">
+    <bean id="openMrshttpClient" class="org.motechproject.openmrs.ws.HttpClientFactoryBean">
         <constructor-arg value="${openmrs.user}" />
         <constructor-arg value="${openmrs.password}" />
     </bean>

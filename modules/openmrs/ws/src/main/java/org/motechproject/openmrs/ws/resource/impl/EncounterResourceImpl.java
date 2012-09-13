@@ -25,6 +25,7 @@ import org.motechproject.openmrs.ws.resource.model.Patient;
 import org.motechproject.openmrs.ws.resource.model.Patient.PatientSerializer;
 import org.motechproject.openmrs.ws.resource.model.Person;
 import org.motechproject.openmrs.ws.resource.model.Person.PersonSerializer;
+import org.motechproject.openmrs.ws.util.EncounterGsonBuilder;
 import org.motechproject.openmrs.ws.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -54,7 +55,6 @@ public class EncounterResourceImpl implements EncounterResource {
                 .registerTypeAdapter(Concept.class, new ConceptSerializer())
                 .registerTypeAdapter(EncounterType.class, new EncounterTypeSerializer())
                 .registerTypeAdapter(ObservationValue.class, new ObservationValueSerializer()).create();
-
         String requestJson = gson.toJson(encounter);
 
         try {
@@ -83,6 +83,16 @@ public class EncounterResourceImpl implements EncounterResource {
                 EncounterListResult.class, adapters);
 
         return result;
+    }
+
+    @Override
+    public Encounter getEncounterById(String uuid) throws HttpException {
+        String responseJson = restClient.getJson(openmrsInstance.toInstancePathWithParams("/encounter/{uuid}?v=full",
+                uuid));
+        Map<Type, Object> adapters = new HashMap<Type, Object>();
+        adapters.put(ObservationValue.class, new ObservationValueDeserializer());
+        Encounter encounter = (Encounter) JsonUtils.readJsonWithAdapters(responseJson, Encounter.class, adapters);
+        return encounter;
     }
 
 }

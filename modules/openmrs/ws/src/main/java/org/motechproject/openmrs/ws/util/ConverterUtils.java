@@ -16,7 +16,8 @@ import org.motechproject.openmrs.ws.resource.model.Person.PreferredName;
 
 public final class ConverterUtils {
 
-    private ConverterUtils() { }
+    private ConverterUtils() {
+    }
 
     public static MRSPerson convertToMrsPerson(Person person) {
         MRSPerson converted = new MRSPerson();
@@ -75,7 +76,11 @@ public final class ConverterUtils {
     }
 
     public static MRSObservation convertObservationToMrsObservation(Observation ob) {
-        return new MRSObservation(ob.getUuid(), ob.getObsDatetime(), ob.getConcept().getDisplay(), ob.getValue()
-                .getDisplay());
+        MRSObservation obs = new MRSObservation(ob.getUuid(), ob.getObsDatetime(), ob.getConcept().getDisplay(), ob
+                .getValue().getDisplay());
+        if (ob.getEncounter().getPatient() != null) {
+            obs.setPatientId(ob.getEncounter().getPatient().getUuid());
+        }
+        return obs;
     }
 }

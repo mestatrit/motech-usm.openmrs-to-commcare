@@ -132,4 +132,10 @@ public class OpenMRSEncounterAdapter implements MRSEncounterAdapter {
         }
         return openMrsEncounter;
     }
+
+    @Override
+    public MRSEncounter getEncounterById(String id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

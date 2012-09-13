@@ -114,42 +114,4 @@ public class MRSEncounterAdapterImplTest {
                 .withEncounterType("").build();
         impl.createEncounter(encounter);
     }
-
-    @Test
-    public void shouldSendCorrectJson() throws HttpException, IOException {
-        DateMidnight date = new DateMidnight(YEAR, MONTH, DAY);
-        DateTime dateTime = date.toDateTime(DateTimeZone.UTC);
-        MRSObservation ob = new MRSObservation(dateTime.toDate(), "Test Concept", "Test Value");
-        Set<MRSObservation> obs = new HashSet<MRSObservation>();
-        obs.add(ob);
-
-        MRSEncounter encounter = new MRSEncounter.MRSEncounterBuilder().withProviderId("PPR").withCreatorId(null)
-                .withFacilityId("LLL").withDate(dateTime.toDate()).withPatientId("PPP").withObservations(obs)
-                .withEncounterType("ADULTINITIAL").build();
-
-        when(conceptAdapter.resolveConceptUuidFromConceptName("Test Concept")).thenReturn("CCC");
-        when(restfulClient.postForJson(any(URI.class), any(String.class))).thenReturn("{}");
-
-        impl.createEncounter(encounter);
-
-        JsonElement expected = TestUtils.parseJsonFile("json/encounter-create.json");
-
-        // manually setting the date because embedding the date in the json file
-        // causes test failures across time zones
-        // Is there a better way of handling this ?
-        expected.getAsJsonObject().addProperty("encounterDatetime", DateUtil.formatToOpenMrsDate(dateTime.toDate()));
-        JsonArray array = expected.getAsJsonObject().get("obs").getAsJsonArray();
-        array.get(0).getAsJsonObject().addProperty("obsDatetime", DateUtil.formatToOpenMrsDate(date.toDate()));
-
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        verify(restfulClient).postForJson(any(URI.class), captor.capture());
-        JsonElement sent = TestUtils.parseJsonString(captor.getValue());
-
-        assertEquals(expected, sent);
-    }
-
-    @Test
-    public void shouldParseJsonForEncounters() {
-
-    }
 }

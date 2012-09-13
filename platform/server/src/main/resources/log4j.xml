@@ -21,7 +21,7 @@
         <level value="WARN" />
     </logger>
 
-    <logger name="org.motechproject.openmrs.atomfeed">
+    <logger name="org.springframework.web.servlet">
         <level value="DEBUG" />
     </logger>
 

@@ -12,6 +12,7 @@ import org.motechproject.openmrs.ws.HttpException;
 import org.motechproject.openmrs.ws.OpenMrsInstance;
 import org.motechproject.openmrs.ws.RestClient;
 import org.motechproject.openmrs.ws.resource.ObservationResource;
+import org.motechproject.openmrs.ws.resource.model.Observation;
 import org.motechproject.openmrs.ws.resource.model.Observation.ObservationValue;
 import org.motechproject.openmrs.ws.resource.model.Observation.ObservationValueDeserializer;
 import org.motechproject.openmrs.ws.resource.model.ObservationListResult;
@@ -43,11 +44,16 @@ public class ObservationResourceImpl implements ObservationResource {
             throw new MRSException(e);
         }
 
-        Map<Type, Object> adapters = new HashMap<Type, Object>();
-        adapters.put(ObservationValue.class, new ObservationValueDeserializer());
+        Map<Type, Object> adapters = getObsAdapters();
         ObservationListResult result = (ObservationListResult) JsonUtils.readJsonWithAdapters(responseJson,
                 ObservationListResult.class, adapters);
         return result;
+    }
+
+    private Map<Type, Object> getObsAdapters() {
+        Map<Type, Object> adapters = new HashMap<Type, Object>();
+        adapters.put(ObservationValue.class, new ObservationValueDeserializer());
+        return adapters;
     }
 
     @Override
@@ -60,6 +66,14 @@ public class ObservationResourceImpl implements ObservationResource {
         }
 
         restClient.delete(uri);
+    }
+
+    @Override
+    public Observation getObservationById(String id) throws HttpException {
+        Map<Type, Object> adapters = getObsAdapters();
+        String responseJson = restClient.getJson(openmrsInstance.toInstancePathWithParams("/obs/{uuid}?v=full", id));
+        Observation obs = (Observation) JsonUtils.readJsonWithAdapters(responseJson, Observation.class, adapters);
+        return obs;
     }
 
 }

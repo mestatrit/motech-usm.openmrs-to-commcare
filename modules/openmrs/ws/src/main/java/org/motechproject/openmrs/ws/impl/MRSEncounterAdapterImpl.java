@@ -12,6 +12,7 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.motechproject.mrs.exception.MRSException;
 import org.motechproject.mrs.model.MRSEncounter;
 import org.motechproject.mrs.model.MRSEncounter.MRSEncounterBuilder;
 import org.motechproject.mrs.model.MRSObservation;
@@ -19,6 +20,7 @@ import org.motechproject.mrs.model.MRSPatient;
 import org.motechproject.mrs.model.MRSPerson;
 import org.motechproject.mrs.services.MRSEncounterAdapter;
 import org.motechproject.mrs.services.MRSPatientAdapter;
+import org.motechproject.openmrs.ws.HttpException;
 import org.motechproject.openmrs.ws.resource.EncounterResource;
 import org.motechproject.openmrs.ws.resource.model.Concept;
 import org.motechproject.openmrs.ws.resource.model.Encounter;
@@ -89,7 +91,7 @@ public class MRSEncounterAdapterImpl implements MRSEncounterAdapter {
         converted.setEncounterDatetime(encounter.getDate());
 
         EncounterType encounterType = new EncounterType();
-        encounterType.setDisplay(encounter.getEncounterType());
+        encounterType.setName(encounter.getEncounterType());
         converted.setEncounterType(encounterType);
 
         Location location = new Location();
@@ -227,7 +229,7 @@ public class MRSEncounterAdapterImpl implements MRSEncounterAdapter {
                 .withFacility(ConverterUtils.convertLocationToMrsLocation(encounter.getLocation()))
                 .withDate(encounter.getEncounterDatetime()).withPatient(patient)
                 .withObservations(convertToMrsObservation(encounter.getObs()))
-                .withEncounterType(encounter.getEncounterType().getDisplay()).build();
+                .withEncounterType(encounter.getEncounterType().getName()).build();
 
         return updated;
     }
@@ -240,5 +242,18 @@ public class MRSEncounterAdapterImpl implements MRSEncounterAdapter {
         }
 
         return mrsObs;
+    }
+
+    @Override
+    public MRSEncounter getEncounterById(String id) {
+        try {
+            Encounter encounter = encounterResource.getEncounterById(id);
+            MRSPatient patient = patientAdapter.getPatient(encounter.getPatient().getUuid());
+            MRSPerson provider = personAdapter.getPerson(encounter.getProvider().getUuid());
+            return convertToMrsEncounter(encounter, provider, patient);
+        } catch (HttpException e) {
+            LOGGER.error("Could not get encounter by id: " + id);
+            throw new MRSException(e);
+        }
     }
 }
